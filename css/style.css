@@ -1,0 +1,23 @@
+.welcome {
+  background-image: url();
+  padding-top: 150px;
+}
+
+.register {
+  padding-top: 80px;
+}
+
+.checkbox-lg {
+  width: 1.25em;
+  height: 1.25em;
+  cursor: pointer;
+}
+
+.btn__animated {
+  transition: transform 0.4s linear;
+}
+
+.btn__animated:hover {
+  transform: rotate(90deg);
+  transition: transform 0.4s linear;
+}

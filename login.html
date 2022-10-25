@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" />
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Bootstap 5</title>
+  </head>
+  <body>
+    <section class="welcome">
+      <div class="container">
+        <h1 class="h1 text-uppercase text-center">welcome</h1>
+        <form onsubmit="onLogin(event)" id="loginForm">
+          <div class="row justify-content-sm-center">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="exampleInputEmail"></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="login"
+                  name="login"
+                  placeholder="Login"
+                  required
+                  value="dusugeN"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-sm-center mb-md-4">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="exampleInputPassword"></label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  required
+                  value="Speaker1"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row justify-content-sm-center mb-5">
+              <div class="col-md-4 ml-md-auto text-end">
+                <input class="btn btn-primary" type="submit" value="Sign In" />
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <button type="button" class="btn btn-link">
+            <a href="register.html">Sign Up</a>
+          </button>
+        </div>
+      </div>
+    </section>
+    <script type="text/JavaScript">
+      function onLogin(event) {
+        event.preventDefault();
+
+        const formElement = document.getElementById('loginForm');
+        const formData = new FormData(formElement);
+
+        const login = formData.get('login')
+        const password = formData.get('password')
+
+        const userInfo = localStorage.getItem('userInfo')
+        const userData = JSON.parse(userInfo)
+
+        if (userData.login===login &&
+        userData.password===password){
+          sessionStorage.setItem('userStatus',true)
+          window.location = 'todo.html'
+        }else {
+          alert ('Пiшов в дупу !')
+        }
+
+      }
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
