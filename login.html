@@ -34,7 +34,7 @@
           <div class="row justify-content-sm-center mb-md-4">
             <div class="col-md-4">
               <div class="form-group">
-                <label for="exampleInputPassword"></label>
+                <label for="password"></label>
                 <input
                   type="password"
                   class="form-control"
@@ -62,27 +62,26 @@
         </div>
       </div>
     </section>
-    <script type="text/JavaScript">
+    <script>
       function onLogin(event) {
         event.preventDefault();
 
-        const formElement = document.getElementById('loginForm');
+        const formElement = document.getElementById("loginForm");
         const formData = new FormData(formElement);
 
-        const login = formData.get('login')
-        const password = formData.get('password')
+        const login = formData.get("login");
+        const password = formData.get("password");
+        let encodedPassword = window.btoa(password);
 
-        const userInfo = localStorage.getItem('userInfo')
-        const userData = JSON.parse(userInfo)
+        const userInfo = localStorage.getItem("userInfo");
+        const userData = JSON.parse(userInfo);
 
-        if (userData.login===login &&
-        userData.password===password){
-          sessionStorage.setItem('userStatus',true)
-          window.location = 'todo.html'
-        }else {
-          alert ('Login or password incorrect!')
+        if (userData.login === login && userData.encodedPassword === encodedPassword) {
+          sessionStorage.setItem("userStatus", true);
+          window.location = "todo.html";
+        } else {
+          alert("Login or password incorrect!");
         }
-
       }
     </script>
     <script type="text/JavaScript">

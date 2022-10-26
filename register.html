@@ -113,11 +113,12 @@
 
           const login = formData.get('login')
           const password = formData.get('password')
+          let encodedPassword = window.btoa(password);
           const email = formData.get ('email')
           const age = formData.get ('age')
           const sex = formData.get ('sex')
 
-          const user = {login , password , email , age , sex }
+          const user = {login , encodedPassword , email , age , sex }
           console.log (user)
           const myStorage = localStorage.setItem('userInfo', JSON.stringify(user))
           console.log(myStorage)
