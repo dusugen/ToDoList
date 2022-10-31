@@ -71,18 +71,24 @@
 
         const login = formData.get("login");
         const password = formData.get("password");
-        let encodedPassword = window.btoa(password);
+        const encodedPassword = window.btoa(password);
 
-        const userInfo = localStorage.getItem("userInfo");
-        const userData = JSON.parse(userInfo);
+        const usersString = localStorage.getItem("users");
+        const usersArray = JSON.parse(usersString);
 
-        if (userData.login === login && userData.encodedPassword === encodedPassword) {
-          sessionStorage.setItem("userStatus", true);
-          window.location = "todo.html";
+        const oldUser = usersArray.find((userItem)=>(userItem.login === login));
+        
+        if (oldUser === undefined) {
+          alert('User not found !');
         } else {
-          alert("Login or password incorrect!");
+          if (oldUser.password === encodedPassword) {
+            sessionStorage.setItem('status',true)
+            window.location = 'todo.html';
+        } else {
+          alert('Wrong password !');
         }
       }
+    }
     </script>
     <script type="text/JavaScript">
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

@@ -105,25 +105,42 @@
           </div>
         </form>
         <script type="text/JavaScript">
-          function submitForm(event){
-            event.preventDefault();
+            function submitForm(event){
+              event.preventDefault();
 
-            const formElement = document.getElementById('register__form');
-            const formData = new FormData(formElement);
+              const formElement = document.getElementById('register__form');
+              const formData = new FormData(formElement);
 
-          const login = formData.get('login')
-          const password = formData.get('password')
-          let encodedPassword = window.btoa(password);
-          const email = formData.get ('email')
-          const age = formData.get ('age')
-          const sex = formData.get ('sex')
+            const login = formData.get('login')
+            const password = formData.get('password')
+            let encodedPassword = window.btoa(password);
+            const email = formData.get ('email')
+            const age = formData.get ('age')
+            const sex = formData.get ('sex')
 
-          const user = {login , encodedPassword , email , age , sex }
-          console.log (user)
-          const myStorage = localStorage.setItem('userInfo', JSON.stringify(user))
-          console.log(myStorage)
-          window.location = 'login.html'
-          }
+            const newUser = {login , encodedPassword , email , age , sex };
+
+            const users = JSON.parse(localStorage.getItem('users')) ?? [];
+
+            const oldUser = users.find(function(user) {
+            if (newUser.login === user.login) {
+              return true;
+            }
+          });
+
+            if (oldUser === undefined) {
+              users.push(newUser);
+            } else {
+              alert('Login already used !');
+              return;
+            }
+
+            localStorage.setItem('users',JSON.stringify(users));
+
+            window.location = 'login.html'
+
+            // const myStorage = localStorage.setItem('users', JSON.stringify(user))
+            }
         </script>
         <div class="row justify-content-center">
           <div class="col-auto">

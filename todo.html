@@ -200,11 +200,11 @@
     <script>
 
       function logOut() {
-        sessionStorage.removeItem('userStatus')
+        sessionStorage.removeItem('status')
         window.location = 'login.html'
       }
 
-      if(!sessionStorage.getItem('userStatus')){
+      if(!sessionStorage.getItem('status')){
           window.location = 'login.html'
       }
 
