@@ -76,19 +76,20 @@
         const usersString = localStorage.getItem("users");
         const usersArray = JSON.parse(usersString);
 
-        const oldUser = usersArray.find((userItem)=>(userItem.login === login));
+        const oldUser = usersArray.find((userItem) => userItem.login === login);
+        const id = oldUser.id;
         
         if (oldUser === undefined) {
-          alert('User not found !');
+          alert("User not found !");
         } else {
-          if (oldUser.password === encodedPassword) {
-            sessionStorage.setItem('status',true)
-            window.location = 'todo.html';
-        } else {
-          alert('Wrong password !');
+          if (oldUser.encodedPassword === encodedPassword) {
+            sessionStorage.setItem("id", id);
+            window.location = "todo.html";
+          } else {
+            alert("Wrong login or password !");
+          }
         }
       }
-    }
     </script>
     <script type="text/JavaScript">
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

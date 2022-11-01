@@ -117,8 +117,22 @@
             const email = formData.get ('email')
             const age = formData.get ('age')
             const sex = formData.get ('sex')
+            const todos = [];
+            // ID generator
+            function str_rand() {
+            let result = '';
+            let words = '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
+            let max_position = words.length - 1;
+              for( i = 0; i < 7; ++i ) {
+                position = Math.floor ( Math.random() * max_position );
+                result = result + words.substring(position, position + 1);
+               }
+               return result;
+           }
 
-            const newUser = {login , encodedPassword , email , age , sex };
+            const id = str_rand();
+
+            const newUser = {login , encodedPassword , email , age , sex, id , todos };
 
             const users = JSON.parse(localStorage.getItem('users')) ?? [];
 

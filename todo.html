@@ -161,11 +161,11 @@
             </div>
             <div class="modal-body">
               <div class="container-fluid">
-                <form>
+                <form class="todo__form" id="todo-form">
                   <div class="form-group">
                     <input
                       type="text"
-                      name=""
+                      name="name"
                       id=""
                       class="form-control"
                       placeholder="Name"
@@ -177,7 +177,7 @@
                     <div class="flatpickr d-inline">
                       <input
                         type="datetime-local"
-                        name=""
+                        name="datetime"
                         id="descrAdd"
                         class="form-control"
                         placeholder="Select date"
@@ -190,28 +190,78 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success text-uppercase">OK</button>
+              <button
+                type="button"
+                form="todo-form"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" form="todo-form" class="btn btn-success text-uppercase">
+                OK
+              </button>
             </div>
           </div>
         </div>
       </div>
     </section>
     <script>
+      function addToDo(event) {
+        debugger;
+        const users = JSON.parse(localStorage.getItem("users"));
+        const userId = sessionStorage.getItem("id");
+        let userIndex;
+        const user = users.find(function (item, index) {
+          if (userId === item.id) {
+            userIndex = index;
+            return true;
+          }
+        });
 
-      function logOut() {
-        sessionStorage.removeItem('status')
-        window.location = 'login.html'
+        const formData = new FormData(event.target);
+
+        const dateTime = formData.get("datetime");
+        const toDoName = formData.get("name");
+
+        const toDoId = str_rand();
+        const toDo = {
+          id: toDoId,
+          name: toDoName,
+          dateTime: dateTime,
+        };
+        user.todos.push(toDo);
+
+        users[userIndex] = user;
+        localStorage.setItem("users", JSON.stringify(users));
       }
 
-      if(!sessionStorage.getItem('status')){
-          window.location = 'login.html'
+      function logOut() {
+        sessionStorage.removeItem("id");
+        window.location = "login.html";
+      }
+
+      if (!sessionStorage.getItem("id")) {
+        window.location = "login.html";
       }
 
       function removeItem() {
-        confirm('Are u sure?')
-
+        confirm("Are u sure?");
       }
+      // ID generator
+      function str_rand() {
+        let result = "";
+        let words = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+        let max_position = words.length - 1;
+        for (i = 0; i < 7; ++i) {
+          position = Math.floor(Math.random() * max_position);
+          result = result + words.substring(position, position + 1);
+        }
+
+        return result;
+      }
+      const form = document.getElementById("todo-form");
+      form.addEventListener("submit", addToDo);
     </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
