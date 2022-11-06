@@ -37,66 +37,72 @@
             </button>
           </div>
         </div>
-        <div class="row justify-content-center mb-4">
-          <div class="col-md-6">
-            <div class="btn-group w-100" role="group" aria-label="Basic radio toggle button group">
-              <input
-                type="radio"
-                class="btn-check"
-                name="btnGroupRadio"
-                id="btnRadio1"
-                autocomplete="off"
-                disabled
-              />
-              <label class="btn btn-outline-primary w-25" for="btnRadio1">Active</label>
+        <form action="#" id="toDoForm">
+          <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+              <div
+                class="btn-group w-100"
+                role="group"
+                aria-label="Basic radio toggle button group"
+              >
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnGroupRadio"
+                  id="btnRadio1"
+                  autocomplete="off"
+                  disabled
+                />
+                <label class="btn btn-outline-primary w-25" for="btnRadio1">Active</label>
 
-              <input
-                type="radio"
-                class="btn-check"
-                name="btnGroupRadio"
-                id="btnRadio2"
-                autocomplete="off"
-                disabled
-              />
-              <label class="btn btn-outline-primary w-25" for="btnRadio2">Today</label>
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnGroupRadio"
+                  id="btnRadio2"
+                  autocomplete="off"
+                  disabled
+                />
+                <label class="btn btn-outline-primary w-25" for="btnRadio2">Today</label>
 
-              <input
-                type="radio"
-                class="btn-check"
-                name="btnGroupRadio"
-                id="btnRadio3"
-                autocomplete="off"
-                disabled
-              />
-              <label class="btn btn-outline-primary w-25" for="btnRadio3">Completed</label>
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnGroupRadio"
+                  id="btnRadio3"
+                  autocomplete="off"
+                  disabled
+                />
+                <label class="btn btn-outline-primary w-25" for="btnRadio3">Completed</label>
 
-              <input
-                type="radio"
-                class="btn-check"
-                name="btnGroupRadio"
-                id="btnRadio4"
-                autocomplete="off"
-                checked
-              />
-              <label class="btn btn-outline-primary w-25" for="btnRadio4">All</label>
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="btnGroupRadio"
+                  id="btnRadio4"
+                  autocomplete="off"
+                  checked
+                />
+                <label class="btn btn-outline-primary w-25" for="btnRadio4">All</label>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-md-6 text-center">
-            <table class="table table-hover align-middle">
-              <thead>
-                <tr>
-                  <th scope="col">status</th>
-                  <th scope="col">name</th>
-                  <th scope="col">date time</th>
-                  <th scope="col">action</th>
-                </tr>
-              </thead>
-              <tbody id="toDoBody"></tbody>
-            </table>
+          <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col">status</th>
+                    <th scope="col">name</th>
+                    <th scope="col">date time</th>
+                    <th scope="col">action</th>
+                  </tr>
+                </thead>
+                <tbody id="toDoBody"></tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
       <div
         class="modal fade"
@@ -180,6 +186,8 @@
         return user;
       }
 
+      // SAVE USER DATA
+
       function saveUserData(data) {
         const users = getUsers();
         const userId = getUserId();
@@ -194,6 +202,8 @@
         saveUsers(users);
       }
 
+      // REMOVE TODO
+
       function removeToDo(id) {
         const user = getUserData();
         const toDoIndex = user.todos.findIndex(function (value) {
@@ -203,9 +213,10 @@
         });
         user.todos.splice(toDoIndex, 1);
         saveUserData(user);
-        debugger;
         renderToDos();
       }
+
+      // SUBMIT TODO FROM MODAL
 
       function submitToDo(event) {
         event.preventDefault();
@@ -233,6 +244,8 @@
       const form = document.getElementById("todo-form");
       form.addEventListener("submit", submitToDo);
 
+      // LOG OUT
+
       function logOut() {
         sessionStorage.removeItem("id");
         window.location = "login.html";
@@ -240,11 +253,6 @@
 
       if (!sessionStorage.getItem("id")) {
         window.location = "login.html";
-      }
-
-      function removeItem() {
-        const removeId = sessionStorage.getItem("id");
-        confirm(`Are u want to delete item with this id: ${removeId}`);
       }
 
       // ADD TODO ROW IN HTML
@@ -255,9 +263,9 @@
           const toDoRow = `<tr>
                     <td scope="row">
                       <div class="form-check d-flex justify-content-center">
-                        <input class="form-check-input checkbox-lg" type="checkbox" name="" ${
-                          item.status ? "checked" : ""
-                        } />
+                        <input class="form-check-input checkbox-lg checkbox" onchange="toggleToDo(this,'${
+                          item.id
+                        }')" type="checkbox" name="" ${item.status ? "checked" : ""} />
                       </div>
                     </td>
                     <td>${item.name}</td>
@@ -273,8 +281,19 @@
 
         toDoBody.innerHTML = toDoRows.join("");
       }
-
       renderToDos();
+
+      // CHECKBOX TRUE/FALSE
+      function toggleToDo(element, id) {
+        const user = getUserData();
+        const toDo = user.todos.find(function (value) {
+          if (id === value.id) {
+            return true;
+          }
+        });
+        toDo.status = element.checked;
+        saveUserData(user);
+      }
 
       // ID generator
       function str_rand() {
