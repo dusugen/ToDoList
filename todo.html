@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/js/bootstrap.js" />
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
@@ -17,7 +18,7 @@
       <div class="container">
         <div class="row">
           <div class="col text-end mb-3">
-            <button type="submit" onclick="logOut()" class="btn btn-link" id="logout">
+            <button type="submit" class="btn btn-link" id="logout">
               <a href="login.html">Log Out</a>
             </button>
           </div>
@@ -89,7 +90,7 @@
           </div>
           <div class="row justify-content-center">
             <div class="col-md-6 text-center">
-              <table class="table table-hover align-middle">
+              <table class="table table-hover align-middle" id="toDosList">
                 <thead>
                   <tr>
                     <th scope="col">status</th>
@@ -202,20 +203,6 @@
         saveUsers(users);
       }
 
-      // REMOVE TODO
-
-      function removeToDo(id) {
-        const user = getUserData();
-        const toDoIndex = user.todos.findIndex(function (value) {
-          if (id === value.id) {
-            return true;
-          }
-        });
-        user.todos.splice(toDoIndex, 1);
-        saveUserData(user);
-        renderToDos();
-      }
-
       // SUBMIT TODO FROM MODAL
 
       function submitToDo(event) {
@@ -238,18 +225,23 @@
         saveUserData(user);
 
         renderToDos();
-        const modalSubmit = document.getElementById("exampleModal");
+        const modalSubmit = $("#exampleModal").get(0);
         $("#exampleModal").modal("hide");
       }
-      const form = document.getElementById("todo-form");
-      form.addEventListener("submit", submitToDo);
+
+      $("#todo-form").submit(submitToDo);
+      // form.addEventListener("submit", submitToDo);
 
       // LOG OUT
-
-      function logOut() {
+      $("#logout").click(function () {
         sessionStorage.removeItem("id");
         window.location = "login.html";
-      }
+      });
+
+      // function logOut() {
+      //   sessionStorage.removeItem("id");
+      //   window.location = "login.html";
+      // }
 
       if (!sessionStorage.getItem("id")) {
         window.location = "login.html";
@@ -261,39 +253,73 @@
         const userToDos = getUserData().todos;
         const toDoRows = userToDos.map((item) => {
           const toDoRow = `<tr>
-                    <td scope="row">
-                      <div class="form-check d-flex justify-content-center">
-                        <input class="form-check-input checkbox-lg checkbox" onchange="toggleToDo(this,'${
-                          item.id
-                        }')" type="checkbox" name="" ${item.status ? "checked" : ""} />
-                      </div>
-                    </td>
-                    <td>${item.name}</td>
-                    <td>${item.dateTime}</td>
-                    <td>
-                      <button class="btn border-0 btn__animated" onclick="removeToDo('${item.id}')">
-                        <img src="icons/x-lg.svg" alt="" />
-                      </button>
-                    </td>
-                  </tr>`;
+                          <td scope="row">
+                            <div class="form-check d-flex justify-content-center">
+                              <input class="form-check-input checkbox-lg checkbox toggleCheckbox" data-id ="${
+                                item.id
+                              }"  type="checkbox" name="" ${item.status ? "checked" : ""} />
+                            </div>
+                          </td>
+                          <td>${item.name}</td>
+                          <td>${item.dateTime}</td>
+                          <td>
+                            <button class="btn border-0 btn__animated removeBtn" data-id ="${
+                              item.id
+                            }" >
+                              <img src="icons/x-lg.svg" alt="" />
+                            </button>
+                          </td>
+                        </tr>`;
           return toDoRow;
         });
 
         toDoBody.innerHTML = toDoRows.join("");
       }
       renderToDos();
+      // event remove todo on click
+      $("#toDosList").on("click", "button", removeToDo);
 
-      // CHECKBOX TRUE/FALSE
-      function toggleToDo(element, id) {
+      // REMOVE TODO
+
+      function removeToDo(event) {
         const user = getUserData();
-        const toDo = user.todos.find(function (value) {
-          if (id === value.id) {
+        const toDoIndex = user.todos.findIndex(function (value) {
+          if (value.id === event.currentTarget.dataset.id) {
             return true;
           }
         });
-        toDo.status = element.checked;
+        user.todos.splice(toDoIndex, 1);
         saveUserData(user);
+        renderToDos();
       }
+      //event toggle checkbox
+      $("#toDosList").on("change", "input", toggleToDo);
+
+      // CHECKBOX TRUE/FALSE
+
+      function toggleToDo(event) {
+        const user = getUserData();
+        const toDo = user.todos.find(function (value) {
+          if (value.id === event.currentTarget.dataset.id) {
+            return true;
+          }
+        });
+        toDo.status = event.target.checked;
+        saveUserData(user);
+        renderToDos();
+      }
+
+      // fution toggleToDo(element, id) {
+      const user = getUserData();
+      //   const toDo = user.todos.find(function (value) {
+      //     if (id === value.id) {
+      //       return true;
+      //     }
+      //   });
+      //   toDo.status = element.checked;
+      //   saveUserData(user);
+      //   renderToDos();
+      // }
 
       // ID generator
       function str_rand() {
